@@ -1,0 +1,15 @@
+{
+    "input_data": {
+      "today": {
+        "revenue": 1500,
+        "cost": 1000,
+        "customers": 50
+      },
+      "yesterday": {
+        "revenue": 1200,
+        "cost": 800,
+        "customers": 40
+      }
+    }
+  }
+  
