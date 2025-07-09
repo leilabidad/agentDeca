@@ -1,42 +1,32 @@
 import unittest
-from agent import app
+from agent import app  # app باید از نوع LangGraph graph باشد
 
 class TestBusinessAgent(unittest.TestCase):
 
     def setUp(self):
         self.test_data = {
-            "today": {
-                "revenue": 1500,
-                "cost": 1000,
-                "customers": 50
-            },
-            "yesterday": {
-                "revenue": 1200,
-                "cost": 800,
-                "customers": 40
-            }
+            "daily_revenue": 1500,
+            "daily_cost": 1000,
+            "previous_revenue": 1200,
+            "previous_cost": 800,
+            "number_of_customers": 50
         }
 
     def test_output_structure(self):
-        result = app.invoke({"input_data": self.test_data})
-        output = result["recommendation"]
-
-        self.assertIn("summary", output)
-        self.assertIn("alerts", output)
-        self.assertIn("recommendations", output)
+        result = app.invoke(self.test_data)
+        self.assertIn("profit", result)
+        self.assertIn("alerts", result)
+        self.assertIn("recommendations", result)
 
     def test_profit_calculation(self):
-        result = app.invoke({"input_data": self.test_data})
-        summary = result["recommendation"]["summary"]
-        expected_profit = 500
-        self.assertEqual(summary["profit"], expected_profit)
+        result = app.invoke(self.test_data)
+        expected_profit = 1500 - 1000
+        self.assertEqual(result["profit"], expected_profit)
 
     def test_alerts_and_recommendations(self):
-        result = app.invoke({"input_data": self.test_data})
-        output = result["recommendation"]
-
-        self.assertIsInstance(output["alerts"], list)
-        self.assertIsInstance(output["recommendations"], list)
+        result = app.invoke(self.test_data)
+        self.assertIsInstance(result["alerts"], list)
+        self.assertIsInstance(result["recommendations"], list)
 
 if __name__ == "__main__":
     unittest.main()
